@@ -1,4 +1,4 @@
-import random 
+import random   
 
 def iniciar(tablero, tam = 10):
     """Por defecto iniciaría un tablero con 10 posiciones a False. 
