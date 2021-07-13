@@ -1,4 +1,5 @@
 import pymysql
+#La librería se instala con el comando: pip install pymysql
 
 def conectar(usuario, clave, bd):
     """Devuelve la variable conexion o -1 si la conexión no ha sido correcta."""
