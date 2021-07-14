@@ -1,6 +1,6 @@
 import persona
 
-p = persona.Persona("Inma", 41)
+p = persona.Persona("Pepe", 30)
 print(p)
 print(persona.Persona.curso)
 print(p.curso)
