@@ -1,6 +1,6 @@
 import tablero  
 
-t = tablero.Tablero()
+t = tablero.Tablero(4)
 
 t.colocarMosca()
 print(t)  #Comentar y descomentar esta línea para comprobar el funcionamiento.
