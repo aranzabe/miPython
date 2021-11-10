@@ -9,6 +9,8 @@ from flask_restful import Resource, Api
 #https://blog.nearsoftjobs.com/crear-un-api-y-una-aplicaci%C3%B3n-web-con-flask-6a76b8bf5383
 #https://content.breatheco.de/es/lesson/building-apis-with-python-flask
 
+#pip install Flask
+#pip install flask_restful
 
 ################################### Probando conexión ####################################
 conex = conexionOO.Conexion('fernando','Chubaca2018','ejemplo')
