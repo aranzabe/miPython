@@ -115,6 +115,26 @@ def getPersona(id): #aquí declaramos una función que se llamará cuando se rea
         resp.status_code = 400
     print(resp)
     return resp
+
+#https://es.acervolima.com/2021/02/09/deserializar-json-a-objeto-en-python/
+@app.route("/registrar", methods=["POST"])
+def debug():
+    data = request.json
+    print(data) #Desde Android nos llega en formato diccionario.
+    print(data['DNI'])
+    print(data['Nombre'])
+    print(data['Tfno'])
+    if (conex.insertarPersona(data['DNI'],data['Nombre'],data['Clave'],data['Tfno'])==0):
+        respuesta = {'message': 'Ok.'}
+        resp = jsonify(respuesta)
+        resp.status_code = 200
+    else:
+        respuesta = {'message': 'Clave duplicada.'}
+        resp = jsonify(respuesta)
+        resp.status_code = 400
+    
+    print(resp)
+    return resp 
     
 
 # Para montarlo en http normaleras.
