@@ -1,4 +1,7 @@
 import pymysql
+import json
+import Persona
+from Persona import Persona, PersonaEncoder
 #La librería se instala con el comando: pip install pymysql
 class Conexion:
     
@@ -47,42 +50,57 @@ class Conexion:
             # print("Ocurrió un error al conectar: ", e)
             return -1
 
+
+    #https://stackoverflow.com/questions/3286525/return-sql-table-as-json-in-python
     def seleccionarTodos(self):
         try:
             self.conectar()
             with self._conexion.cursor() as cursor:
                 # En este caso no necesitamos limpiar ningún dato
                 cursor.execute("SELECT DNI, Nombre, Clave, Tfno FROM personas")
-
-                # Con fetchall traemos todas las filas
-                pers = cursor.fetchall()
-                lisPersonas = []
-                # Recorrer e imprimir
-                for pe in pers:
-                    lisPersonas += [pe]
-                    
+                r = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+                #print(r)
                 self.cerrarConexion()
-                return pers
+                return r
         except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
             return []
-        
+
+
+    #https://www.programcreek.com/python/example/104689/sklearn.datasets.fetch_20newsgroups
+    #https://stackoverflow.com/questions/11280382/object-is-not-json-serializable
     def buscarDNI(self, dni):
         try:
             self.conectar()
             with self._conexion.cursor() as cursor:
                 # En este caso no necesitamos limpiar ningún dato
-                cursor.execute("SELECT * FROM personas WHERE DNI = %s", (dni))
-
-                # Con fetchall traemos todas las filas
-                pers = cursor.fetchall()
-                lisPersonas = []
-                # Recorrer e imprimir
-                for pe in pers:
-                    lisPersonas += [pe]
+                cursor.execute("SELECT DNI, Nombre, Clave, Tfno FROM personas WHERE DNI = %s", (dni))
+                
+                r = [dict((cursor.description[i][0], value) for i, value in enumerate(row)) for row in cursor.fetchall()]
+                # print(r)
+                # print("----")
+                print(r)
+                # objJson = r[0]
+                # # Con fetchall traemos todas las filas
+                # pers = cursor.fetchall()
+                # # Recorrer e imprimir
+                # for row in pers:
+                #     p = Persona(row[0],row[1],row[2],row[3])
+                # objJson = json.dumps(p, cls=PersonaEncoder, indent=4)
+                # #print(objJson)
+                
                 self.cerrarConexion()
-                return lisPersonas
+                
+                
+                if (r):
+                    return r[0]
+                else:
+                    return []
+                
+                
         except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
             return []
+        
+        
         
     def cambiarClave(self, dniEditar, nueva):
         try:

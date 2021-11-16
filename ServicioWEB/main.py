@@ -1,5 +1,6 @@
 import conexionOO
 import json
+import Persona
 from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 
@@ -84,11 +85,12 @@ def hello():
     return 'Hola holita'
 
 
+#https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
+#pip install pyopenssl  --> para montarlo sobre https.
 @app.route("/listado", methods=['GET']) #aquí especificamos la ruta para el endpoint.
 def getPersonas(): #aquí declaramos una función que se llamará cuando se realice una request a esa url
     listaPersonas = conex.seleccionarTodos()
-    
-    
+    print(listaPersonas)
     if (len(listaPersonas) != 0):
         resp = jsonify(listaPersonas)
         resp.status_code = 200
@@ -96,14 +98,14 @@ def getPersonas(): #aquí declaramos una función que se llamará cuando se real
         respuesta = {'message': 'No se han extraido datos.'}
         resp = jsonify(respuesta)
         resp.status_code = 400
-    
-    
+    print(resp)
     return resp
 
 @app.route("/listado/<id>", methods=['GET']) #aquí especificamos la ruta para el endpoint.
 def getPersona(id): #aquí declaramos una función que se llamará cuando se realice una request a esa url
-    
+    print(id)
     listaPersonas = conex.buscarDNI(id)
+    print(jsonify(listaPersonas))
     if (len(listaPersonas) != 0):
         resp = jsonify(listaPersonas)
         resp.status_code = 200
@@ -111,8 +113,14 @@ def getPersona(id): #aquí declaramos una función que se llamará cuando se rea
         respuesta = {'message': 'No se han extraido datos.'}
         resp = jsonify(respuesta)
         resp.status_code = 400
+    print(resp)
     return resp
     
 
+# Para montarlo en http normaleras.
 if __name__ == '__main__':
     app.run(debug=True)
+
+# Esto es para montarlo en https.
+# if __name__ == "__main__":
+#     app.run(ssl_context='adhoc')
