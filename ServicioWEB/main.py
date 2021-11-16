@@ -119,7 +119,8 @@ def getPersona(id): #aquí declaramos una función que se llamará cuando se rea
 
 # Para montarlo en http normaleras.
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    app.run(debug=True, host= '192.168.1.108') #Esto sería para poder usar el móvil. No arrancaría el servicio en localhost sino en esa ip.
 
 # Esto es para montarlo en https.
 # if __name__ == "__main__":
