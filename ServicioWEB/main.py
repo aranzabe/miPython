@@ -79,12 +79,12 @@ conex = conexionOO.Conexion('fernando','Chubaca2018','ejemplo')
 app = Flask(__name__)
 api = Api(app)
 
-
+#------------------------------------------------------------------------------
 @app.route('/')
 def hello():
     return 'Hola holita'
 
-
+#------------------------------------------------------------------------------
 #https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
 #pip install pyopenssl  --> para montarlo sobre https.
 @app.route("/listado", methods=['GET']) #aquí especificamos la ruta para el endpoint.
@@ -101,6 +101,7 @@ def getPersonas(): #aquí declaramos una función que se llamará cuando se real
     print(resp)
     return resp
 
+#------------------------------------------------------------------------------
 @app.route("/listado/<id>", methods=['GET']) #aquí especificamos la ruta para el endpoint.
 def getPersona(id): #aquí declaramos una función que se llamará cuando se realice una request a esa url
     print(id)
@@ -116,9 +117,9 @@ def getPersona(id): #aquí declaramos una función que se llamará cuando se rea
     print(resp)
     return resp
 
-#https://es.acervolima.com/2021/02/09/deserializar-json-a-objeto-en-python/
+#------------------------------------------------------------------------------
 @app.route("/registrar", methods=["POST"])
-def debug():
+def addPersona():
     data = request.json
     print(data) #Desde Android nos llega en formato diccionario.
     print(data['DNI'])
@@ -135,7 +136,42 @@ def debug():
     
     print(resp)
     return resp 
+
+#------------------------------------------------------------------------------    
+@app.route("/borrar/<dni>", methods=["DELETE"])
+def delPersona(dni):
     
+    if (conex.borrarDNI(dni)>0):
+        respuesta = {'message': 'Ok.'}
+        resp = jsonify(respuesta)
+        resp.status_code = 200
+    else:
+        respuesta = {'message': 'DNI' + str(dni) + ' no encontrado.'}
+        resp = jsonify(respuesta)
+        resp.status_code = 400
+    print(respuesta)
+    print(resp)
+    return resp 
+
+#------------------------------------------------------------------------------
+@app.route("/modificar", methods=["PUT"])
+def modPersona():
+    data = request.json
+    print(data) #Desde Android nos llega en formato diccionario.
+    print(data['DNI'])
+    print(data['Nombre'])
+    print(data['Tfno'])
+    if (conex.modificarPersona(data['DNI'],data['Nombre'],data['Tfno']) > 0):
+        respuesta = {'message': 'Ok.'}
+        resp = jsonify(respuesta)
+        resp.status_code = 200
+    else:
+        respuesta = {'message': 'Error al modificar.'}
+        resp = jsonify(respuesta)
+        resp.status_code = 400
+    
+    print(resp)
+    return resp 
 
 # Para montarlo en http normaleras.
 if __name__ == '__main__':

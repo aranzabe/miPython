@@ -47,7 +47,7 @@ class Conexion:
             self.cerrarConexion()
             return 0
         except (pymysql.err.IntegrityError) as e:
-            # print("Ocurrió un error al conectar: ", e)
+            # print("Ocurrió un error al insertar: clave duplicada.", e)
             return -1
 
 
@@ -117,6 +117,7 @@ class Conexion:
             return -1
         
         
+    #https://pynative.com/python-mysql-delete-data/
     def borrarDNI(self, dniBorrar):
         try:
             self.conectar()
@@ -127,6 +128,22 @@ class Conexion:
                 # No olvidemos hacer commit cuando hacemos un cambio a la BD
                 self._conexion.commit()
                 self.cerrarConexion()
-                return 0
+                return cursor.rowcount #Registros afectados en el borrado.
         except (pymysql.err.OperationalError, pymysql.err.InternalError) as e:
             return -1
+        
+    #https://pynative.com/python-mysql-update-data/
+    def modificarPersona(self, dni, nombre, tfno):
+        """Insertar una persona en la tabla Personas."""
+        try:
+            self.conectar()
+            cursor =  self._conexion.cursor()
+            consulta = "UPDATE personas SET DNI = %s, Nombre = %s, Tfno = %s  WHERE dni = %s;"
+            cursor.execute(consulta, (dni, nombre, tfno, dni))
+            self._conexion.commit()
+            self.cerrarConexion()
+            return cursor.rowcount
+        except (pymysql.err.IntegrityError) as e:
+            # print("Ocurrió un error al insertar: clave duplicada.", e)
+            return -1
+
