@@ -144,7 +144,7 @@ def delPersona(dni):
     if (conex.borrarDNI(dni)>0):
         respuesta = {'message': 'Ok.'}
         resp = jsonify(respuesta)
-        resp.status_code = 200
+        resp.status_code = 200 
     else:
         respuesta = {'message': 'DNI' + str(dni) + ' no encontrado.'}
         resp = jsonify(respuesta)
@@ -176,7 +176,7 @@ def modPersona():
 # Para montarlo en http normaleras.
 if __name__ == '__main__':
     #app.run(debug=True)
-    app.run(debug=True, host= '192.168.1.108') #Esto sería para poder usar el móvil. No arrancaría el servicio en localhost sino en esa ip.
+    app.run(debug=True, host= '0.0.0.0') #Esto sería para poder usar el móvil. No arrancaría el servicio en localhost sino en esa ip.
 
 # Esto es para montarlo en https.
 # if __name__ == "__main__":
